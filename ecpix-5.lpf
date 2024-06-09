@@ -1,0 +1,353 @@
+###############################################################################
+# Clock
+###############################################################################
+LOCATE COMP "fpga_sysclk" SITE K23;
+ IOBUF PORT "fpga_sysclk" IO_TYPE=LVCMOS33;
+
+LOCATE COMP "SDCrd_26MHz" SITE N22;
+ IOBUF PORT "SDCrd_26MHz" IO_TYPE=LVCMOS33;
+
+LOCATE COMP "vcxo_fpga" SITE H26;
+ IOBUF PORT "vcxo_fpga" IO_TYPE=LVCMOS33;
+
+LOCATE COMP "clk_1_80MHz" SITE L23;
+ IOBUF PORT "clk_1_80MHz" IO_TYPE=LVCMOS33;
+
+#TODO LOCATE COMP "refclk_100MHz_p" SITE AF12;
+#TODO LOCATE COMP "refclk_100MHz_n" SITE AF13;
+
+
+FREQUENCY PORT "fpga_sysclk" 100 MHZ;
+###############################################################################
+# Reset
+###############################################################################
+LOCATE COMP "rst_ulpi_"   SITE E23;
+LOCATE COMP "hdmi_rst_"   SITE N6;
+LOCATE COMP "phy_rst_"    SITE C13;
+LOCATE COMP "rst_ft2232_" SITE P23;
+LOCATE COMP "rst_fpga_"   SITE N5;
+LOCATE COMP "rst_sys_"    SITE M6;
+###############################################################################
+# RGB LED
+###############################################################################
+LOCATE COMP "led_rgb0[0]" SITE U21;
+LOCATE COMP "led_rgb0[1]" SITE W21;
+LOCATE COMP "led_rgb0[2]" SITE T24;
+ IOBUF PORT "led_rgb0[0]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb0[1]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb0[2]" IO_TYPE=LVCMOS33;
+
+LOCATE COMP "led_rgb1[0]" SITE T23;
+LOCATE COMP "led_rgb1[1]" SITE R21;
+LOCATE COMP "led_rgb1[2]" SITE T22;
+ IOBUF PORT "led_rgb1[0]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb1[1]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb1[2]" IO_TYPE=LVCMOS33;
+
+LOCATE COMP "led_rgb2[0]" SITE P21;
+LOCATE COMP "led_rgb2[1]" SITE R23;
+LOCATE COMP "led_rgb2[2]" SITE P22;
+ IOBUF PORT "led_rgb2[0]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb2[1]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb2[2]" IO_TYPE=LVCMOS33;
+
+LOCATE COMP "led_rgb3[0]" SITE K21;
+LOCATE COMP "led_rgb3[1]" SITE K24;
+LOCATE COMP "led_rgb3[2]" SITE M21;
+ IOBUF PORT "led_rgb3[0]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb3[1]" IO_TYPE=LVCMOS33;
+ IOBUF PORT "led_rgb3[2]" IO_TYPE=LVCMOS33;
+/**/
+,
+###############################################################################
+# FT2232
+###############################################################################
+LOCATE COMP "uart_txd" SITE R26;
+LOCATE COMP "uart_rxd" SITE R24;
+ IOBUF PORT "uart_txd" IO_TYPE=LVCMOS33;
+ IOBUF PORT "uart_rxd" IO_TYPE=LVCMOS33;
+###############################################################################
+# MicroSD
+###############################################################################
+LOCATE COMP "SDCrd_sel"    SITE L24;
+LOCATE COMP "SDCrd_clk"    SITE P24;
+LOCATE COMP "SDCrd_clkfb"  SITE J26;
+LOCATE COMP "SDCrd_dircmd" SITE M23;
+LOCATE COMP "SDCrd_cmd"    SITE M24;
+LOCATE COMP "SDCrd_d01_p"  SITE N26;
+LOCATE COMP "SDCrd_d01_n"  SITE N25;
+LOCATE COMP "SDCrd_d2"     SITE N23;
+LOCATE COMP "SDCrd_d3"     SITE N21;
+LOCATE COMP "SDCrd_dir0"   SITE N24;
+LOCATE COMP "SDCrd_dir1_3" SITE P26;
+LOCATE COMP "SDCrd_cd"     SITE L22;
+#TODO LOCATE COMP "GTP4_tx_p"    SITE AD19;
+#TODO LOCATE COMP "GTP4_tx_n"    SITE AD20;
+#TODO LOCATE COMP "GTP4_rx_p"    SITE AF18;
+#TODO LOCATE COMP "GTP4_rx_n"    SITE AF19;
+###############################################################################
+# SATA
+###############################################################################
+#TODO LOCATE COMP "GTP3_tx_p" SITE AD16;
+#TODO LOCATE COMP "GTP3_tx_n" SITE AD17;
+#TODO LOCATE COMP "GTP3_rx_p" SITE AF15;
+#TODO LOCATE COMP "GTP3_rx_n" SITE AF16;
+###############################################################################
+# PMOD Conn
+###############################################################################
+LOCATE COMP "PMOD0[0]" SITE T25;
+LOCATE COMP "PMOD0[1]" SITE U25;
+LOCATE COMP "PMOD0[2]" SITE U24;
+LOCATE COMP "PMOD0[3]" SITE V24;
+LOCATE COMP "PMOD0[4]" SITE T26;
+LOCATE COMP "PMOD0[5]" SITE U26;
+LOCATE COMP "PMOD0[6]" SITE V26;
+LOCATE COMP "PMOD0[7]" SITE W26;
+
+LOCATE COMP "PMOD1[0]" SITE U23;
+LOCATE COMP "PMOD1[1]" SITE V23;
+LOCATE COMP "PMOD1[2]" SITE U22;
+LOCATE COMP "PMOD1[3]" SITE V21;
+LOCATE COMP "PMOD1[4]" SITE W25;
+LOCATE COMP "PMOD1[5]" SITE W24;
+LOCATE COMP "PMOD1[6]" SITE W23;
+LOCATE COMP "PMOD1[7]" SITE W22;
+
+LOCATE COMP "PMOD2[0]" SITE J24;
+LOCATE COMP "PMOD2[1]" SITE H22;
+LOCATE COMP "PMOD2[2]" SITE E21;
+LOCATE COMP "PMOD2[3]" SITE D18;
+LOCATE COMP "PMOD2[4]" SITE K22;
+LOCATE COMP "PMOD2[5]" SITE J21;
+LOCATE COMP "PMOD2[6]" SITE H21;
+LOCATE COMP "PMOD2[7]" SITE D24;
+
+LOCATE COMP "PMOD3[0]" SITE E4;
+LOCATE COMP "PMOD3[1]" SITE F4;
+LOCATE COMP "PMOD3[2]" SITE E6;
+LOCATE COMP "PMOD3[3]" SITE H4;
+LOCATE COMP "PMOD3[4]" SITE F3;
+LOCATE COMP "PMOD3[5]" SITE D4;
+LOCATE COMP "PMOD3[6]" SITE D5;
+LOCATE COMP "PMOD3[7]" SITE F5;
+
+LOCATE COMP "PMOD4_0_p" SITE D25;
+LOCATE COMP "PMOD4_0_n" SITE E26;
+LOCATE COMP "PMOD4_1_p" SITE F25;
+LOCATE COMP "PMOD4_1_n" SITE F26;
+LOCATE COMP "PMOD4_2_p" SITE A24;
+LOCATE COMP "PMOD4_2_n" SITE A25;
+LOCATE COMP "PMOD4_3_p" SITE C25;
+LOCATE COMP "PMOD4_3_n" SITE C26;
+
+LOCATE COMP "PMOD5[0]" SITE D19;
+LOCATE COMP "PMOD5[1]" SITE C21;
+LOCATE COMP "PMOD5[2]" SITE B21;
+LOCATE COMP "PMOD5[3]" SITE C22;
+LOCATE COMP "PMOD5[4]" SITE D21;
+LOCATE COMP "PMOD5[5]" SITE A21;
+LOCATE COMP "PMOD5[6]" SITE A22;
+LOCATE COMP "PMOD5[7]" SITE A23;
+
+LOCATE COMP "PMOD6[0]" SITE C16;
+LOCATE COMP "PMOD6[1]" SITE B17;
+LOCATE COMP "PMOD6[2]" SITE C18;
+LOCATE COMP "PMOD6[3]" SITE B19;
+LOCATE COMP "PMOD6[4]" SITE A17;
+LOCATE COMP "PMOD6[5]" SITE A18;
+LOCATE COMP "PMOD6[6]" SITE A19;
+LOCATE COMP "PMOD6[7]" SITE C19;
+
+LOCATE COMP "PMOD7[0]" SITE D14;
+LOCATE COMP "PMOD7[1]" SITE B14;
+LOCATE COMP "PMOD7[2]" SITE E14;
+LOCATE COMP "PMOD7[3]" SITE B16;
+LOCATE COMP "PMOD7[4]" SITE C14;
+LOCATE COMP "PMOD7[5]" SITE A14;
+LOCATE COMP "PMOD7[6]" SITE A15;
+LOCATE COMP "PMOD7[7]" SITE A16;
+###############################################################################
+# DDR3
+###############################################################################
+LOCATE COMP "ddr_ck_p"   SITE H3;
+LOCATE COMP "ddr_ck_n"   SITE J3;
+LOCATE COMP "ddr_cke"    SITE P1;
+LOCATE COMP "ddr_ba[0]"  SITE U6;
+LOCATE COMP "ddr_ba[1]"  SITE N3;
+LOCATE COMP "ddr_ba[2]"  SITE N4;
+LOCATE COMP "ddr_a[0]"   SITE T5;
+LOCATE COMP "ddr_a[1]"   SITE M3;
+LOCATE COMP "ddr_a[2]"   SITE L3;
+LOCATE COMP "ddr_a[3]"   SITE V6;
+LOCATE COMP "ddr_a[4]"   SITE K2;
+LOCATE COMP "ddr_a[5]"   SITE W6;
+LOCATE COMP "ddr_a[6]"   SITE K3;
+LOCATE COMP "ddr_a[7]"   SITE L1;
+LOCATE COMP "ddr_a[8]"   SITE H2;
+LOCATE COMP "ddr_a[9]"   SITE L2;
+LOCATE COMP "ddr_a[10]"  SITE N1;
+LOCATE COMP "ddr_a[11]"  SITE J1;
+LOCATE COMP "ddr_a[12]"  SITE M1;
+LOCATE COMP "ddr_a[13]"  SITE K1;
+LOCATE COMP "ddr_a[14]"  SITE H1;
+LOCATE COMP "ddr_d[0]"   SITE T4;
+LOCATE COMP "ddr_d[1]"   SITE W4;
+LOCATE COMP "ddr_d[2]"   SITE R4;
+LOCATE COMP "ddr_d[3]"   SITE W5;
+LOCATE COMP "ddr_d[4]"   SITE R6;
+LOCATE COMP "ddr_d[5]"   SITE P6;
+LOCATE COMP "ddr_d[6]"   SITE P5;
+LOCATE COMP "ddr_d[7]"   SITE P4;
+LOCATE COMP "ddr_d[8]"   SITE R1;
+LOCATE COMP "ddr_d[9]"   SITE W3;
+LOCATE COMP "ddr_d[10]"  SITE T2;
+LOCATE COMP "ddr_d[11]"  SITE V3;
+LOCATE COMP "ddr_d[12]"  SITE U3;
+LOCATE COMP "ddr_d[13]"  SITE W1;
+LOCATE COMP "ddr_d[14]"  SITE T1;
+LOCATE COMP "ddr_d[15]"  SITE W2;
+LOCATE COMP "ddr_we_"    SITE R3;
+LOCATE COMP "ddr_cas_"   SITE P2;
+LOCATE COMP "ddr_ras_"   SITE T3;
+LOCATE COMP "ddr_ldqs_p" SITE V4;
+LOCATE COMP "ddr_ldqs_n" SITE U5;
+LOCATE COMP "ddr_udqs_p" SITE V1;
+LOCATE COMP "ddr_udqs_n" SITE U2;
+LOCATE COMP "ddr_ldm"    SITE U4;
+LOCATE COMP "ddr_udm"    SITE U1;
+LOCATE COMP "ddr_odt"    SITE P3;
+###############################################################################
+# ULPI
+###############################################################################
+LOCATE COMP "ulpi_data[0]" SITE M26;
+LOCATE COMP "ulpi_data[1]" SITE L25;
+LOCATE COMP "ulpi_data[2]" SITE L26;
+LOCATE COMP "ulpi_data[3]" SITE K25;
+LOCATE COMP "ulpi_data[4]" SITE K26;
+LOCATE COMP "ulpi_data[5]" SITE J23;
+LOCATE COMP "ulpi_data[6]" SITE P25;
+LOCATE COMP "ulpi_data[7]" SITE H25;
+LOCATE COMP "ulpi_stp"     SITE H23;
+LOCATE COMP "ulpi_nxt"     SITE F23;
+LOCATE COMP "ulpi_dir"     SITE F22;
+LOCATE COMP "ulpi_clkout"  SITE H24;
+###############################################################################
+# SS MUX
+###############################################################################
+#TODO LOCATE COMP "gtp1_tx_p"     SITE AD7;
+#TODO LOCATE COMP "gtp1_tx_n"     SITE AD8;
+#TODO LOCATE COMP "gtp1_rx_p"     SITE AF6;
+#TODO LOCATE COMP "gtp1_rx_n"     SITE AF7;
+#TODO LOCATE COMP "gtp2_tx_p"     SITE AD10;
+#TODO LOCATE COMP "gtp2_tx_n"     SITE AD11;
+#TODO LOCATE COMP "gtp2_rx_p"     SITE AF9;
+#TODO LOCATE COMP "gtp2_rx_n"     SITE AF10;
+#TODO LOCATE COMP "fpga_auxclk_p" SITE AF21;
+#TODO LOCATE COMP "fpga_auxclk_n" SITE AF22;
+###############################################################################
+# HDMI
+###############################################################################
+LOCATE COMP "hdmi_g[0]"  SITE AA23;
+LOCATE COMP "hdmi_g[1]"  SITE AA22;
+LOCATE COMP "hdmi_g[2]"  SITE AA24;
+LOCATE COMP "hdmi_g[3]"  SITE AA25;
+LOCATE COMP "hdmi_g[4]"  SITE E1;
+LOCATE COMP "hdmi_g[5]"  SITE F2;
+LOCATE COMP "hdmi_g[6]"  SITE F1;
+LOCATE COMP "hdmi_g[7]"  SITE D17;
+LOCATE COMP "hdmi_g[8]"  SITE D16;
+LOCATE COMP "hdmi_g[9]"  SITE E16;
+LOCATE COMP "hdmi_g[10]" SITE J6;
+LOCATE COMP "hdmi_g[11]" SITE H6;
+LOCATE COMP "hdmi_b[0]"  SITE AD25;
+LOCATE COMP "hdmi_b[1]"  SITE AC26;
+LOCATE COMP "hdmi_b[2]"  SITE AB24;
+LOCATE COMP "hdmi_b[3]"  SITE AB25;
+LOCATE COMP "hdmi_b[4]"  SITE B3;
+LOCATE COMP "hdmi_b[5]"  SITE C3;
+LOCATE COMP "hdmi_b[6]"  SITE D3;
+LOCATE COMP "hdmi_b[7]"  SITE B1;
+LOCATE COMP "hdmi_b[8]"  SITE C2;
+LOCATE COMP "hdmi_b[9]"  SITE D2;
+LOCATE COMP "hdmi_b[10]" SITE D1;
+LOCATE COMP "hdmi_b[11]" SITE E3;
+LOCATE COMP "hdmi_r[0]"  SITE AD26;
+LOCATE COMP "hdmi_r[1]"  SITE AE25;
+LOCATE COMP "hdmi_r[2]"  SITE AF25;
+LOCATE COMP "hdmi_r[3]"  SITE AE26;
+LOCATE COMP "hdmi_r[4]"  SITE E10;
+LOCATE COMP "hdmi_r[5]"  SITE D11;
+LOCATE COMP "hdmi_r[6]"  SITE D10;
+LOCATE COMP "hdmi_r[7]"  SITE C10;
+LOCATE COMP "hdmi_r[8]"  SITE D9;
+LOCATE COMP "hdmi_r[9]"  SITE E8;
+LOCATE COMP "hdmi_r[10]" SITE H5;
+LOCATE COMP "hdmi_r[11]" SITE J4;
+ IOBUF PORT "hdmi_g[0]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[1]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[2]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[3]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[4]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[5]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[6]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[7]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[8]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[9]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[10]" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_g[11]" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[0]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[1]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[2]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[3]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[4]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[5]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[6]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[7]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[8]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[9]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[10]" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_b[11]" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[0]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[1]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[2]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[3]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[4]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[5]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[6]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[7]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[8]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[9]"  IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[10]" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_r[11]" IO_TYPE=LVTTL33;
+
+LOCATE COMP "hdmi_scl" SITE C17;
+LOCATE COMP "hdmi_sda" SITE E17;
+ IOBUF PORT "hdmi_scl" PULLMODE=UP IO_TYPE=LVTTL33 DRIVE=4;
+ IOBUF PORT "hdmi_sda" PULLMODE=UP IO_TYPE=LVTTL33 DRIVE=4;
+
+LOCATE COMP "hdmi_de"    SITE A3;
+LOCATE COMP "hdmi_hsync" SITE B4;
+LOCATE COMP "hdmi_vsync" SITE A4;
+LOCATE COMP "hdmi_pclk"  SITE C1;
+ IOBUF PORT "hdmi_de"    IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_hsync" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_vsync" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_pclk"  IO_TYPE=LVTTL33;
+###############################################################################
+# Ethernet
+###############################################################################
+LOCATE COMP "phy_txd[0]" SITE D8;
+LOCATE COMP "phy_txd[1]" SITE C8;
+LOCATE COMP "phy_txd[2]" SITE B8;
+LOCATE COMP "phy_txd[3]" SITE A8;
+LOCATE COMP "phy_txen"   SITE C9;
+LOCATE COMP "phy_gtxclk" SITE A12;
+LOCATE COMP "phy_rxd[0]" SITE B11;
+LOCATE COMP "phy_rxd[1]" SITE A10;
+LOCATE COMP "phy_rxd[2]" SITE B10;
+LOCATE COMP "phy_rxd[3]" SITE A9;
+
+LOCATE COMP "phy_int_" SITE B13;
+
+LOCATE COMP "phy_mdc"  SITE C11;
+LOCATE COMP "phy_mdio" SITE A13;
