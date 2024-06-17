@@ -15,8 +15,8 @@ LOCATE COMP "clk_1_80MHz" SITE L23;
 
 #TODO LOCATE COMP "refclk_100MHz_p" SITE AF12;
 #TODO LOCATE COMP "refclk_100MHz_n" SITE AF13;
-
-
+#
+#
 FREQUENCY PORT "fpga_sysclk" 100 MHZ;
 ###############################################################################
 # Reset
@@ -27,6 +27,7 @@ LOCATE COMP "phy_rst_"    SITE C13;
 LOCATE COMP "rst_ft2232_" SITE P23;
 LOCATE COMP "rst_fpga_"   SITE N5;
 LOCATE COMP "rst_sys_"    SITE M6;
+LOCATE COMP "gsrn"        SITE AB1;
 ###############################################################################
 # RGB LED
 ###############################################################################
@@ -57,13 +58,11 @@ LOCATE COMP "led_rgb3[2]" SITE M21;
  IOBUF PORT "led_rgb3[0]" IO_TYPE=LVCMOS33;
  IOBUF PORT "led_rgb3[1]" IO_TYPE=LVCMOS33;
  IOBUF PORT "led_rgb3[2]" IO_TYPE=LVCMOS33;
-/**/
-,
 ###############################################################################
 # FT2232
 ###############################################################################
-LOCATE COMP "uart_txd" SITE R26;
-LOCATE COMP "uart_rxd" SITE R24;
+LOCATE COMP "uart_txd" SITE R24;
+LOCATE COMP "uart_rxd" SITE R26;
  IOBUF PORT "uart_txd" IO_TYPE=LVCMOS33;
  IOBUF PORT "uart_rxd" IO_TYPE=LVCMOS33;
 ###############################################################################
@@ -247,6 +246,16 @@ LOCATE COMP "ulpi_clkout"  SITE H24;
 ###############################################################################
 # HDMI
 ###############################################################################
+LOCATE COMP "hdmi_scl" SITE C17;
+LOCATE COMP "hdmi_sda" SITE E17;
+LOCATE COMP "hdmi_int" SITE C4;
+ IOBUF PORT "hdmi_scl" PULLMODE=UP IO_TYPE=LVTTL33 DRIVE=4;
+ IOBUF PORT "hdmi_sda" PULLMODE=UP IO_TYPE=LVTTL33 DRIVE=4;
+ IOBUF PORT "hdmi_int" IO_TYPE=LVTTL33;
+
+LOCATE COMP "hdmi_hsync" SITE B4;
+LOCATE COMP "hdmi_vsync" SITE A4;
+LOCATE COMP "hdmi_de"    SITE A3;
 LOCATE COMP "hdmi_g[0]"  SITE AA23;
 LOCATE COMP "hdmi_g[1]"  SITE AA22;
 LOCATE COMP "hdmi_g[2]"  SITE AA24;
@@ -283,6 +292,9 @@ LOCATE COMP "hdmi_r[8]"  SITE D9;
 LOCATE COMP "hdmi_r[9]"  SITE E8;
 LOCATE COMP "hdmi_r[10]" SITE H5;
 LOCATE COMP "hdmi_r[11]" SITE J4;
+ IOBUF PORT "hdmi_hsync" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_vsync" IO_TYPE=LVTTL33;
+ IOBUF PORT "hdmi_de"    IO_TYPE=LVTTL33;
  IOBUF PORT "hdmi_g[0]"  IO_TYPE=LVTTL33;
  IOBUF PORT "hdmi_g[1]"  IO_TYPE=LVTTL33;
  IOBUF PORT "hdmi_g[2]"  IO_TYPE=LVTTL33;
@@ -320,19 +332,23 @@ LOCATE COMP "hdmi_r[11]" SITE J4;
  IOBUF PORT "hdmi_r[10]" IO_TYPE=LVTTL33;
  IOBUF PORT "hdmi_r[11]" IO_TYPE=LVTTL33;
 
-LOCATE COMP "hdmi_scl" SITE C17;
-LOCATE COMP "hdmi_sda" SITE E17;
- IOBUF PORT "hdmi_scl" PULLMODE=UP IO_TYPE=LVTTL33 DRIVE=4;
- IOBUF PORT "hdmi_sda" PULLMODE=UP IO_TYPE=LVTTL33 DRIVE=4;
-
-LOCATE COMP "hdmi_de"    SITE A3;
-LOCATE COMP "hdmi_hsync" SITE B4;
-LOCATE COMP "hdmi_vsync" SITE A4;
 LOCATE COMP "hdmi_pclk"  SITE C1;
- IOBUF PORT "hdmi_de"    IO_TYPE=LVTTL33;
- IOBUF PORT "hdmi_hsync" IO_TYPE=LVTTL33;
- IOBUF PORT "hdmi_vsync" IO_TYPE=LVTTL33;
  IOBUF PORT "hdmi_pclk"  IO_TYPE=LVTTL33;
+
+LOCATE COMP "AudioMCLK" SITE E19;
+LOCATE COMP "i2s[0]"    SITE A6;
+LOCATE COMP "i2s[1]"    SITE B6;
+LOCATE COMP "i2s[2]"    SITE A5;
+LOCATE COMP "i2s[3]"    SITE C5;
+LOCATE COMP "i2s_ws"    SITE C6;
+LOCATE COMP "i2s_sck"   SITE D6;
+ IOBUF PORT "AudioMCLK" IO_TYPE=LVTTL33;
+ IOBUF PORT "i2s[0]"    IO_TYPE=LVTTL33;
+ IOBUF PORT "i2s[1]"    IO_TYPE=LVTTL33;
+ IOBUF PORT "i2s[2]"    IO_TYPE=LVTTL33;
+ IOBUF PORT "i2s[3]"    IO_TYPE=LVTTL33;
+ IOBUF PORT "i2s_ws"    IO_TYPE=LVTTL33;
+ IOBUF PORT "i2s_sck"   IO_TYPE=LVTTL33;
 ###############################################################################
 # Ethernet
 ###############################################################################

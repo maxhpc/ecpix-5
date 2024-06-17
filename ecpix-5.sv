@@ -14,7 +14,8 @@ module top(
  input phy_rst_,
  input rst_ft2232_,
  input rst_fpga_,
- inout rst_sys_
+ inout rst_sys,
+ input gsrn
 /**/
 ,
 /* RGB LED */
@@ -152,7 +153,7 @@ module top(
 /**/
 );
 /* Reset */
- assign rst_sys = 1'bz;
+ assign rst_sys_ = 1'bz;
 /**/
 
 endmodule

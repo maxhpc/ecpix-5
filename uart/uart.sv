@@ -1,4 +1,4 @@
-module leds(
+module uart(
 /* Clock */
  input fpga_sysclk,
  input SDCrd_26MHz,
@@ -156,31 +156,10 @@ module leds(
  assign rst_sys_ = 1'bz;
 /**/
 
-reg[32:0] pre;
- wire ce = pre[32];
-always @(posedge fpga_sysclk, negedge rst_fpga_)
- if (!rst_fpga_) begin
-  pre <= -1;
- end
-  else begin
-   if (ce) begin
-    pre <= (100_000_000/*Hz*/)/(30/*Hz*/) -2;
-   end
-    else begin
-     pre <= pre-1;
-    end
-  end
+/* UART */
+ assign uart_txd = uart_rxd;
 
-reg[11:0] cnt;
- assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = ~cnt;
-always @(posedge fpga_sysclk, negedge rst_fpga_)
- if (!rst_fpga_) begin
-  cnt <= 0;
- end
-  else begin
-   if (ce) begin
-    cnt <= cnt +1;
-   end
-  end
+ assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = {12{uart_rxd}};
+/**/
 
 endmodule
