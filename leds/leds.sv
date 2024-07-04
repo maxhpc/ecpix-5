@@ -1,3 +1,5 @@
+// maxhpc: Maxim Vorontsov
+
 module leds(
 /* Clock */
  input fpga_sysclk,

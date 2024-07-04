@@ -1,6 +1,6 @@
 # maxhpc: Maxim Vorontsov
 
-PROJECT = uart
+PROJECT = vx
 SRC = $(wildcard *.sv)
 
 include ../build.mk

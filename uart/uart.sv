@@ -1,165 +1,200 @@
-module uart(
-/* Clock */
- input fpga_sysclk,
- input SDCrd_26MHz,
- input vcxo_fpga,
- input clk_1_80MHz//TODO ,
- //TODO input refclk_100MHz_p,
- //TODO input refclk_100MHz_n
-/**/
-,
-/* Reset */
- input rst_ulpi_,
- input hdmi_rst_,
- input phy_rst_,
- input rst_ft2232_,
- input rst_fpga_,
- inout rst_sys_,
- input gsrn
-/**/
-,
-/* RGB LED */
- output[2:0] led_rgb0,
- output[2:0] led_rgb1,
- output[2:0] led_rgb2,
- output[2:0] led_rgb3
-/**/
-,
-/* FT2232 */
- output uart_txd,
- input  uart_rxd
-/**/
-,
-/* MicroSD */
- output SDCrd_sel,
- output SDCrd_clk,
- input  SDCrd_clkfb,
- output SDCrd_dircmd,
- inout  SDCrd_cmd,
- inout  SDCrd_d01_p,
- inout  SDCrd_d01_n,
- inout  SDCrd_d2,
- inout  SDCrd_d3,
- output SDCrd_dir0,
- output SDCrd_dir1_3,
- input  SDCrd_cd//TODO ,
- //TODO inout  GTP4_tx_p,
- //TODO inout  GTP4_tx_n,
- //TODO inout  GTP4_rx_p,
- //TODO inout  GTP4_rx_n
-/**/
-//TODO ,
-/* SATA */
- //TODO inout GTP3_tx_p,
- //TODO inout GTP3_tx_n,
- //TODO inout GTP3_rx_p,
- //TODO inout GTP3_rx_n
-/**/
-,
-/* PMOD Conn */
- inout[7:0] PMOD0
- ,
- inout[7:0] PMOD1
- ,
- inout[7:0] PMOD2
- ,
- inout[7:0] PMOD3
- ,
- inout PMOD4_0_p,
- inout PMOD4_0_n,
- inout PMOD4_1_p,
- inout PMOD4_1_n,
- inout PMOD4_2_p,
- inout PMOD4_2_n,
- inout PMOD4_3_p,
- inout PMOD4_3_n
- ,
- inout[7:0] PMOD5
- ,
- inout[7:0] PMOD6
- ,
- inout[7:0] PMOD7
-/**/
-,
-/* DDR3 */
- output       ddr_ck_p,
- output       ddr_ck_n,
- output       ddr_cke,
- output[ 2:0] ddr_ba,
- output[14:0] ddr_a,
- input [15:0] ddr_d,
- output       ddr_we_,
- output       ddr_cas_,
- output       ddr_ras_,
- inout        ddr_ldqs_p,
- inout        ddr_ldqs_n,
- inout        ddr_udqs_p,
- inout        ddr_udqs_n,
- output       ddr_ldm,
- output       ddr_udm,
- output       ddr_odt
-/**/
-,
-/* ULPI */
- inout[7:0] ulpi_data,
- output     ulpi_stp,
- input      ulpi_nxt,
- input      ulpi_dir,
- input      ulpi_clkout
-/**/
-//TODO ,
-/* SS MUX */
- //TODO inout gtp1_tx_p,
- //TODO inout gtp1_tx_n,
- //TODO inout gtp1_rx_p,
- //TODO inout gtp1_rx_n,
- //TODO inout gtp2_tx_p,
- //TODO inout gtp2_tx_n,
- //TODO inout gtp2_rx_p,
- //TODO inout gtp2_rx_n,
- //TODO inout fpga_auxclk_p,
- //TODO inout fpga_auxclk_n
-/**/
-,
-/* HDMI */
- output hdmi_scl,
- inout  hdmi_sda,
- input  hdmi_int
- ,
- output       hdmi_hsync,
- output       hdmi_vsync,
- output       hdmi_de,
- output[11:0] hdmi_r,
- output[11:0] hdmi_g,
- output[11:0] hdmi_b,
- output       hdmi_pclk
- ,
- output      AudioMCLK,
- output[3:0] i2s,
- output      i2s_ws,
- output      i2s_sck
-/**/
-,
-/* Ethernet */
- output[3:0] phy_txd,
- output      phy_txen,
- output      phy_gtxclk,
- inout [3:0] phy_rxd
- ,
- input phy_int_
- ,
- output phy_mdc,
- input  phy_mdio
-/**/
+// maxhpc: Maxim Vorontsov
+
+module uart #(parameter
+ CLK_HZ = 100000000
+,BAUD   = 1000000
+)(
+ `include "../ecpix5_ports.hv"
 );
 /* Reset */
  assign rst_sys_ = 1'bz;
 /**/
 
 /* UART */
- assign uart_txd = uart_rxd;
+ /* rxd filter */
+  reg filt_rxd;
 
- assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = {12{uart_rxd}};
+  localparam FILT_WD = $clog2((CLK_HZ/BAUD)/4);
+
+  reg Ruart_rxd;
+  always @(posedge fpga_sysclk)
+   if (!rst_fpga_) begin
+    Ruart_rxd <= uart_rxd;
+   end
+    else begin
+     Ruart_rxd <= uart_rxd;
+    end
+
+  reg[FILT_WD:0] rxd_filtCnt;
+  always @(posedge fpga_sysclk)
+   if (!rst_fpga_) begin
+    filt_rxd <= Ruart_rxd;
+    rxd_filtCnt <= 0;
+   end
+    else begin
+     rxd_filtCnt[FILT_WD] <= 1'b0;
+     rxd_filtCnt <= rxd_filtCnt+1;
+     if (filt_rxd == Ruart_rxd) begin
+      rxd_filtCnt <= 0;
+     end
+     if (rxd_filtCnt[FILT_WD]) begin
+      filt_rxd <= Ruart_rxd;
+     end
+    end
+ /**/
+ /* RX */
+  reg[7:0] rx_byte;
+  reg      rx_stb;
+
+  reg Rfilt_rxd;
+  always @(posedge fpga_sysclk)
+   if (!rst_fpga_) begin
+    Rfilt_rxd <= filt_rxd;
+   end
+    else begin
+     Rfilt_rxd <= filt_rxd;
+    end
+
+  reg[32:0] rx_smplCnt;
+  always @(posedge fpga_sysclk, negedge rst_fpga_)
+   if (!rst_fpga_) begin
+    rx_smplCnt <= 33'h0;
+   end
+    else begin
+     rx_smplCnt <= rx_smplCnt-1;
+     if (rx_smplCnt[32]) begin
+      rx_smplCnt <= (CLK_HZ/BAUD) -2;
+     end
+     if (Rfilt_rxd != filt_rxd) begin
+      rx_smplCnt <= (CLK_HZ/BAUD)/2 -2;
+     end
+    end
+
+  enum {RX_IDLE
+       ,RX_DATA
+       ,RX_STOP
+       ,RXST_SIZE} RX_STATES_ENUM;
+  reg[RXST_SIZE-1:0] rx_state;
+  reg          [4:0] rx_bitCnt;
+  always @(posedge fpga_sysclk, negedge rst_fpga_)
+   if (!rst_fpga_) begin
+    rx_stb <= 1'b0;
+    rx_state <= (1<<RX_IDLE);
+   end
+    else begin
+     rx_stb <= 1'b0;
+     if (rx_smplCnt[32]) begin
+      unique case (rx_state)
+       default: begin // (1<<RX_IDLE)
+        if (!Rfilt_rxd) begin // start
+         rx_bitCnt <= 8 -2;
+         rx_state <= (1<<RX_DATA);
+        end
+       end
+       (1<<RX_DATA): begin
+        rx_byte <= {Rfilt_rxd, rx_byte[7:1]};
+        //
+        rx_bitCnt <= rx_bitCnt-1;
+        if (rx_bitCnt[4]) begin
+         rx_state <= (1<<RX_STOP);
+        end
+       end
+       (1<<RX_STOP): begin
+        if (Rfilt_rxd) begin // stop
+         rx_stb <= 1'b1;
+        end
+        rx_state <= (1<<RX_IDLE);
+       end
+      endcase
+     end
+    end
+ /**/
+ assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = rx_byte;
+ /* TX */
+  reg[7:0] tx_byte;
+  reg      tx_req;
+  wire     tx_idle;
+
+  reg[32:0] tx_smplCnt;
+  always @(posedge fpga_sysclk, negedge rst_fpga_)
+   if (!rst_fpga_) begin
+    tx_smplCnt <= 33'h0;
+   end
+    else begin
+     tx_smplCnt <= tx_smplCnt-1;
+     if (tx_smplCnt[32]) begin
+      tx_smplCnt <= (CLK_HZ/BAUD) -2;
+     end
+    end
+
+  enum {TX_IDLE
+       ,TX_START
+       ,TX_DATA
+       ,TX_STOP
+       ,TXST_SIZE} TX_STATES_ENUM;
+  reg[TXST_SIZE-1:0] tx_state;
+   assign tx_idle = tx_state[TX_IDLE];
+  reg          [4:0] tx_bitCnt;
+  reg          [7:0] tx_data;
+  reg                uart_txd;
+  always @(posedge fpga_sysclk, negedge rst_fpga_)
+   if (!rst_fpga_) begin
+    uart_txd <= 1'b1;
+    //
+    tx_state <= (1<<TX_IDLE);
+   end
+    else begin
+     unique case (tx_state)
+      default: begin // (1<<TX_IDLE)
+       if (tx_req) begin
+        tx_data <= tx_byte;
+        tx_state <= (1<<TX_START);
+       end
+      end
+      (1<<TX_START): begin
+       if (tx_smplCnt[32]) begin
+        uart_txd <= 1'b0;
+        //
+        tx_bitCnt <= 8 -2;
+        tx_state <= (1<<TX_DATA);
+       end
+      end
+      (1<<TX_DATA): begin
+       if (tx_smplCnt[32]) begin
+        uart_txd <= tx_data[0];
+        tx_data <= tx_data>>1;
+        //
+        tx_bitCnt <= tx_bitCnt-1;
+        if (tx_bitCnt[4]) begin
+         tx_state <= (1<<TX_STOP);
+        end
+       end
+      end
+      (1<<TX_STOP): begin
+       if (tx_smplCnt[32]) begin
+        uart_txd <= 1'b1;
+        tx_state <= (1<<TX_IDLE);
+       end
+      end
+     endcase
+    end
+ /**/
+ /* loopback */
+  always @(posedge fpga_sysclk, negedge rst_fpga_)
+   if (!rst_fpga_) begin
+    tx_req <= 1'b0;
+   end
+    else begin
+     if (!tx_idle) begin
+      tx_req <= 1'b0;
+     end
+     if (rx_stb) begin
+      tx_byte <= rx_byte+1;
+      tx_req <= 1'b1;
+     end
+    end
+ /**/
 /**/
 
 endmodule
+// vim: foldenable foldmethod=indent shiftwidth=1 foldlevel=0

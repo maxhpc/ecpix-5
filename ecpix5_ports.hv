@@ -1,4 +1,5 @@
-module top(
+// maxhpc: Maxim Vorontsov
+
 /* Clock */
  input fpga_sysclk,
  input SDCrd_26MHz,
@@ -14,7 +15,7 @@ module top(
  input phy_rst_,
  input rst_ft2232_,
  input rst_fpga_,
- inout rst_sys,
+ inout rst_sys_,
  input gsrn
 /**/
 ,
@@ -37,7 +38,7 @@ module top(
  output SDCrd_dircmd,
  inout  SDCrd_cmd,
  inout  SDCrd_d01_p,
- inout  SDCrd_d01_n,
+ //inout  SDCrd_d01_n,
  inout  SDCrd_d2,
  inout  SDCrd_d3,
  output SDCrd_dir0,
@@ -66,13 +67,13 @@ module top(
  inout[7:0] PMOD3
  ,
  inout PMOD4_0_p,
- inout PMOD4_0_n,
+ //inout PMOD4_0_n,
  inout PMOD4_1_p,
- inout PMOD4_1_n,
+ //inout PMOD4_1_n,
  inout PMOD4_2_p,
- inout PMOD4_2_n,
- inout PMOD4_3_p,
- inout PMOD4_3_n
+ //inout PMOD4_2_n,
+ inout PMOD4_3_p//,
+ //inout PMOD4_3_n
  ,
  inout[7:0] PMOD5
  ,
@@ -83,18 +84,18 @@ module top(
 ,
 /* DDR3 */
  output       ddr_ck_p,
- output       ddr_ck_n,
+ //output       ddr_ck_n,
  output       ddr_cke,
  output[ 2:0] ddr_ba,
  output[14:0] ddr_a,
- input [15:0] ddr_d,
+ inout [15:0] ddr_d,
  output       ddr_we_,
  output       ddr_cas_,
  output       ddr_ras_,
  inout        ddr_ldqs_p,
- inout        ddr_ldqs_n,
+ //inout        ddr_ldqs_n,
  inout        ddr_udqs_p,
- inout        ddr_udqs_n,
+ //inout        ddr_udqs_n,
  output       ddr_ldm,
  output       ddr_udm,
  output       ddr_odt
@@ -151,9 +152,3 @@ module top(
  output phy_mdc,
  input  phy_mdio
 /**/
-);
-/* Reset */
- assign rst_sys_ = 1'bz;
-/**/
-
-endmodule
