@@ -18,10 +18,8 @@
 using namespace vortex;
 
 int main() {
-// maxhpc* maxhpc_ = new maxhpc("/dev/ttyUSB1");
-maxhpc maxhpc_("/dev/ttyUSB1");
-  if (maxhpc_.dev_ok) {
-   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+ maxhpc maxhpc_("/dev/ttyUSB1");
+  if (maxhpc_.dev_stat()) {
    return -1;
   }
  //
@@ -58,3 +56,4 @@ maxhpc maxhpc_("/dev/ttyUSB1");
  free(wbuf);
  return 0;
 }
+// vim: foldenable foldmethod=indent shiftwidth=1 foldlevel=0
