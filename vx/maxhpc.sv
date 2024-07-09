@@ -14,7 +14,7 @@
 
 `define LENGTH(ADR,SIZ,OFS) (((ADR+SIZ-1)>>(OFS))-((ADR)>>(OFS)))
 
-module vx(
+module maxhpc(
  `include "../ecpix5_ports.hv"
 );
 /* clocks */
@@ -174,15 +174,20 @@ wire       dfi_rddata_valid_w;
 /**/
 
 /* Vortex stuff */
+ wire       ddcr_wr_valid;
+ wire[31:0] dcr_wr_addr;
+ wire[31:0] dc_wr_data;
+
  /* receive */
   enum {RCV_CMD
        ,RCV_CMD_STB
-       ,RCV_WRWORD
-       ,RCV_DDRWR
+       ,RCV_AXI4_WDATA
+       ,RCV_AXI4_WRITE
+       ,RCV_DCR_WRITE
        ,RCVST_SIZE} RCVST_ENUM;
   reg[RCVST_SIZE-1:0] rcv_state;
   struct packed{
-   reg   [31:0] size;
+   reg   [31:0] sizdat;
    reg   [31:0] addr;
    reg[4*8-1:0] opcode;
   } rcv_cmd;
@@ -190,7 +195,6 @@ wire       dfi_rddata_valid_w;
   //
   reg[32:0] rcv_wrCnt;
   reg [1:0] rcv_wrPtr;
-  reg[31:0] rcv_wrWord;
   `ALWAYS(posedge sysclk, negedge rst_)
    if (!rst_) begin
     axi4_awvalid <= 1'b0;
@@ -222,8 +226,9 @@ wire       dfi_rddata_valid_w;
         rcv_cmdCnt <= rcv_cmdCnt-1;
        end
       end
+      //
       (1<<RCV_CMD_STB): begin
-       rcv_wrCnt <= rcv_cmd.size -2;
+       rcv_wrCnt <= rcv_cmd.sizdat -2;
        rcv_wrPtr <= rcv_cmd.addr[1:0];
        //
        axi4_awaddr  <= rcv_cmd.addr[31:2]<<2;
@@ -231,7 +236,11 @@ wire       dfi_rddata_valid_w;
        //
        case (rcv_cmd.opcode)
         "ddrW": begin
-         rcv_state <= (1<<RCV_WRWORD);
+         rcv_state <= (1<<RCV_AXI4_WDATA);
+        end
+        //
+        "dcrW": begin
+         rcv_state <= (1<<RCV_DCR_WRITE);
         end
         //
         default: begin
@@ -241,44 +250,49 @@ wire       dfi_rddata_valid_w;
        endcase
       end
       //
-      (1<<RCV_WRWORD): begin
+      (1<<RCV_AXI4_WDATA): begin
        if (rx_stb) begin
         rcv_wrCnt <= rcv_wrCnt-1;
         rcv_wrPtr <= rcv_wrPtr+1;
         case (rcv_wrPtr)
          2'h0: begin
-          rcv_wrWord[0+:8] <= rx_byte;
+          axi4_wdata[0+:8] <= rx_byte;
          end
          2'h1: begin
-          rcv_wrWord[8+:8] <= rx_byte;
+          axi4_wdata[8+:8] <= rx_byte;
          end
          2'h2: begin
-          rcv_wrWord[16+:8] <= rx_byte;
+          axi4_wdata[16+:8] <= rx_byte;
          end
          2'h3: begin
-          rcv_wrWord[24+:8] <= rx_byte;
+          axi4_wdata[24+:8] <= rx_byte;
          end
         endcase
         if ((rcv_wrPtr==3'h3) || rcv_wrCnt[32]) begin
-         rcv_state <= (1<<RCV_DDRWR);
+         rcv_state <= (1<<RCV_AXI4_WRITE);
         end
        end
       end
-      (1<<RCV_DDRWR): begin
+      //
+      (1<<RCV_AXI4_WRITE): begin
        axi4_awlen   <= 8'h0;
        axi4_awvalid <= 1'b1;
        //
-       axi4_wdata <= rcv_wrWord;
        axi4_wlast  <= 1'b1;
        axi4_wvalid <= 1'b1;
        //
-       rcv_state <= (1<<RCV_WRWORD);
+       rcv_state <= (1<<RCV_AXI4_WDATA);
        rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
        if (rcv_wrCnt[32] && !rcv_wrCnt[0]) begin
-        axi4_wstrb  <= axi4_wstrb & (4'b1111>>(2'h3 & ~(rcv_cmd.addr[1:0]+rcv_cmd.size[1:0]-1)));
+        axi4_wstrb  <= axi4_wstrb & (4'b1111>>(2'h3 & ~(rcv_cmd.addr[1:0]+rcv_cmd.sizdat[1:0]-1)));
         //
         rcv_state <= (1<<RCV_CMD);
        end
+      end
+      //
+      (1<<RCV_DCR_WRITE): begin
+       rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
+       rcv_state <= (1<<RCV_CMD);
       end
      endcase
     end
@@ -312,7 +326,7 @@ wire       dfi_rddata_valid_w;
           axi4_araddr <= rcv_cmd.addr[31:2]<<2;
           axi4_arlen   <= 8'h0;
           //
-          snd_byteCnt <= rcv_cmd.size -2;
+          snd_byteCnt <= rcv_cmd.sizdat -2;
           snd_axi4rdPtr <= rcv_cmd.addr[1:0];
           //
           snd_state <= (1<<SND_AXI4_ARVALID);
@@ -360,6 +374,10 @@ wire       dfi_rddata_valid_w;
      endcase
     end
  /**/
+
+ assign dcr_wr_valid = rcv_state[RCV_DCR_WRITE];
+ assign dcr_wr_addr = rcv_cmd.addr;
+ assign dcr_wr_data = rcv_cmd.sizdat;
 /**/
 
 /* LEDs */

@@ -1,13 +1,13 @@
 // maxhpc: Maxim Vorontsov
 
-#include "Vvx.h"
+#include "Vmaxhpc.h"
 #if VM_TRACE_VCD
 #include <verilated_vcd_c.h>
 #endif
 
 class tb {
  VerilatedContext Vcnxt;
- Vvx              dut{&Vcnxt};
+ Vmaxhpc          dut{&Vcnxt};
  #if VM_TRACE_VCD
   VerilatedVcdC trace;
  #endif
