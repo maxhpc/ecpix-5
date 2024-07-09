@@ -1,6 +1,6 @@
 # maxhpc: Maxim Vorontsov
 
-SRC = ../vx.sv
+SRC = ../maxhpc.sv
 INC = -I../../libs
 INC+= -I../../libs/ddr3
 

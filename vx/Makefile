@@ -1,6 +1,6 @@
 # maxhpc: Maxim Vorontsov
 
-PROJECT = vx
+PROJECT = maxhpc
 SRC = $(wildcard *.sv)
 
 include ../build.mk
