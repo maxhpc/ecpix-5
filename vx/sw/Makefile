@@ -4,7 +4,7 @@ PROJECT = maxhpc
 SRC = $(wildcard *.cpp)
 
 ${PROJECT}: $(SRC)
-	g++ $< -o $@
+	g++ -I. $^ -o $@
 
 clean:
 	rm ${PROJECT}

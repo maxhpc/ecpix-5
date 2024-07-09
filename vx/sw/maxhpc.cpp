@@ -1,3 +1,7 @@
+// maxhpc: Maxim Vorontsov
+
+#include <maxhpc.h>
+
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -11,23 +15,25 @@
 #include <sys/ioctl.h>
 #include <asm/termbits.h>
 
-class maxhpc {
+using namespace vortex;
+
+class maxhpc::Impl {
 public:
  bool dev_ok = 0;
 
- maxhpc(const char* dev_path) {
+ Impl(const char* dev_path) {
   fd = open(dev_path, O_RDWR);
    if (fd < 0) {
-    printf("Error from open: %s\n", strerror(errno));
-    exit(1);
+    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+    return;
    }
   //
   //
   struct termios2 tio;
   if(ioctl(fd, TCGETS2, &tio)) {
-   printf("Error from ioctl: %s\n", strerror(errno));
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
    close(fd);
-   exit(1);
+   return;
   }
   tio.c_iflag = 0;
   tio.c_oflag = 0;
@@ -41,18 +47,18 @@ public:
   tio.c_ospeed = 1000000;
   tio.c_ispeed = 1000000;
   if(ioctl(fd, TCSETS2, &tio)) {
-   printf("Error from ioctl: %s\n", strerror(errno));
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
    close(fd);
-   exit(1);
+   return;
   }
   dev_ok = 1;
  }
 
- ~maxhpc() {
+ ~Impl() {
   close(fd);
  }
 
- int ddrW(const void* src, uint32_t addr, uint32_t size) {
+ int ddrW(uint32_t addr, const void* src, uint32_t size) {
   cmd cmd = {{'W','r','d','d'}, addr, size};
   if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
@@ -85,6 +91,17 @@ public:
   return 0;
  }
 
+ void write_dcr(uint32_t addr, uint32_t value) {
+printf("111111111111111111111111111111111111111111111111111111111111\n");
+  return;
+ }
+
+ int run() {
+printf("2222222222222222222222222222222222222222222222222222222222222\n");
+sleep(3);
+  return 0;
+ }
+
 private:
  int fd;
  struct __attribute__((__packed__)) cmd {
@@ -94,43 +111,25 @@ private:
  };
 };
 
-int main() {
- maxhpc maxhpc("/dev/ttyUSB1");
-  if (!maxhpc.dev_ok) {
-   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
-   return -1;
-  }
- //
- //
- uint32_t addr = 0x80000000;
- uint32_t size = 0x00010000;
- //
- uint8_t* wbuf = (uint8_t*)malloc(size);
-  if (wbuf==NULL) {
-   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
-   return -1;
-  }
-  for (uint32_t i=0; i<size; i++) {
-   wbuf[i] = i;
-  }
- if (maxhpc.ddrW(wbuf, addr, size)) {
-  return -1;
- }
- //
- uint8_t* rbuf = (uint8_t*)malloc(size);
-  if (wbuf==NULL) {
-   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
-   return -1;
-  }
- if (maxhpc.ddrR(rbuf, addr, size)) {
-  return -1;
- }
- for (uint32_t i=0; i<size; i++) {
-  if (rbuf[i]!=wbuf[i]) {
-   printf("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee %x: %x != %x\n", i, rbuf[i], wbuf[i]);
-  }
- }
- free(rbuf);
- free(wbuf);
- return 0;
+maxhpc::maxhpc(const char* dev_path) : Impl_(new Impl(dev_path)) {
+}
+
+maxhpc::~maxhpc() {
+ delete Impl_;
+}
+
+int maxhpc::ddrW(uint32_t addr, const void* src, uint32_t size) {
+ return Impl_->ddrW(addr, src, size);
+}
+
+int maxhpc::ddrR(void* dest, uint32_t addr, uint32_t size) {
+ return Impl_->ddrR(dest, addr, size);
+}
+
+void maxhpc::write_dcr(uint32_t addr, uint32_t value) {
+ Impl_->write_dcr(addr, value);
+}
+
+int maxhpc::run() {
+ return Impl_->run();
 }
