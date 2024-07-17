@@ -24,8 +24,20 @@ int main() {
   }
  //
  //
- uint32_t addr = 0x80000000;
- uint32_t size = 0x00010000;
+// if (maxhpc_.rstW(0x0)) {
+//  return -1;
+// }
+// if (maxhpc_.rstW(0x1)) {
+//  return -1;
+// }
+uint32_t tap[4];
+if (maxhpc_.tapR(&tap[0], 0x0)) {
+ return -1;
+}
+printf("ttttttttttttttttttttttttttttttttttttttap0: %08x\n", tap[0]);
+ //
+ uint32_t addr = 0x00000000;
+ uint32_t size = 0x00000100;
  //
  uint8_t* wbuf = (uint8_t*)malloc(size);
   if (wbuf==NULL) {

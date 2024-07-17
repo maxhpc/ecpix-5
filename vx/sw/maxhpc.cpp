@@ -20,12 +20,14 @@ namespace vortex {
    maxhpc(const char* dev_path);
    ~maxhpc();
    int dev_stat();
-  
+
    int ddrW(uint32_t addr, const void* src, uint32_t size);
    int ddrR(void* dest, uint32_t addr, uint32_t size);
-   int write_dcr(uint32_t addr, uint32_t value);
+   int dcrW(uint32_t addr, uint32_t value);
+   int rstW(bool value);
+   int tapR(void* dest, uint8_t tap_i);
    int run();
-  
+
   private:
    bool dev_ok = 0;
    int fd;
@@ -76,7 +78,19 @@ namespace vortex {
  int maxhpc::dev_stat() {
   return (dev_ok)? 0 : -1;
  }
- 
+
+ ssize_t my_readn(int fd, void *buf, size_t nbyte) {
+  ssize_t rbytes = 0;
+  while (rbytes<nbyte) {
+   ssize_t n;
+   if ((n=read(fd, buf+rbytes, nbyte-rbytes))<0) {
+    return n;
+   }
+   rbytes += n;
+  }
+  return rbytes;
+ }
+
  int maxhpc::ddrW(uint32_t addr, const void* src, uint32_t size) {
   cmd cmd = {{'W','r','d','d'}, addr, size};
   if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
@@ -98,19 +112,14 @@ namespace vortex {
    return -1;
   }
   //
-  uint32_t rbytes = 0;
-  while (rbytes<cmd.sizdat) {
-   int n;
-   if ((n=read(fd, dest+rbytes, cmd.sizdat-rbytes))<0) {
-    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
-    return -1;
-   }
-   rbytes += n;
+  if (my_readn(fd, dest, cmd.sizdat)<0) {
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+   return -1;
   }
   return 0;
  }
  
- int maxhpc::write_dcr(uint32_t addr, uint32_t value) {
+ int maxhpc::dcrW(uint32_t addr, uint32_t value) {
   cmd cmd = {{'W','r','c','d'}, addr, value};
   if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
@@ -119,9 +128,34 @@ namespace vortex {
   return 0;
  }
  
+ int maxhpc::rstW(bool value) {
+  cmd cmd = {{'W','t','s','r'}, 0, value};
+  if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+   return -1;
+  }
+  return 0;
+ }
+ 
+ int maxhpc::tapR(void* dest, uint8_t tap_i) {
+  cmd cmd = {{'R','p','a','t'}, tap_i, 0};
+  if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+   return -1;
+  }
+  //
+  if (my_readn(fd, dest, 4)<0) {
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+   return -1;
+  }
+  return 0;
+ }
+ 
  int maxhpc::run() {
- printf("2222222222222222222222222222222222222222222222222222222222222\n");
- sleep(3);
+printf("2222222222222222222222222222222222222222222222222222222222222\n");
+  rstW(0);
+sleep(10);
+  rstW(1);
   return 0;
  }
 
