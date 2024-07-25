@@ -23,11 +23,11 @@ class tb {
    //
    reset();
    //
-   run(100);
-   dut.uart_rxd = 0;
-   run(50);
-   dut.uart_rxd = 1;
-   run(1000);
+//   run(100);
+//   dut.uart_rxd = 0;
+//   run(50);
+//   dut.uart_rxd = 1;
+   run(100000);
   }
 
   ~tb() {
@@ -37,17 +37,19 @@ class tb {
   }
 
   void reset() {
+   dut.rst_fpga_ = 1;
+   //
    dut.uart_rxd = 1;
    dut.gsrn = 0;
    for (uint32_t i=0; i<100; i++) {
-    this->tick();
+    tick();
    }
    dut.gsrn = 1;
   }
 
   void run(uint64_t n) {
    for (uint64_t i=0; i<n; i++) {
-    this->tick();
+    tick();
    }
   }
 
@@ -74,3 +76,4 @@ int main() {
  tb tb;
  return 0;
 }
+// vim: foldenable foldmethod=indent shiftwidth=1 foldlevel=0

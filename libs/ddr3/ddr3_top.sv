@@ -1,7 +1,8 @@
 // maxhpc: Maxim Vorontsov
 
-`include "core_ddr3_controller/examples/ecpix_ecp5/ecp5pll.sv"
+`ifndef VERILATOR
 `include "core_ddr3_controller/src_v/phy/ecp5/ddr3_dfi_phy.v"
+`endif
 `include "core_ddr3_controller/src_v/ddr3_axi_retime.v"
 `include "core_ddr3_controller/src_v/ddr3_axi_pmem.v"
 `include "core_ddr3_controller/src_v/ddr3_dfi_seq.v"
@@ -82,6 +83,7 @@ wire       dfi_rddata_en_w;
 wire[31:0] dfi_rddata_w;
 wire       dfi_rddata_valid_w;
 wire[ 1:0] dfi_rddata_dnv_w;
+`ifndef VERILATOR
 ddr3_dfi_phy
 u_phy
 (
@@ -121,6 +123,15 @@ u_phy
     ,.ddr3_dqs_p_io(ddr3_dqs_p)
     ,.ddr3_dq_io(ddr3_dq)
 );
+
+`else
+reg[6:0] lat;
+ assign dfi_rddata_valid_w = lat[6];
+always @(posedge clk) begin
+ lat <= {lat[5:0], dfi_rddata_en_w};
+end
+
+`endif
 
 ddr3_axi
 #(

@@ -2,6 +2,9 @@
 
 `define NOASYNC
 
+`ifndef VERILATOR
+`include "../libs/ddr3/core_ddr3_controller/examples/ecpix_ecp5/ecp5pll.sv"
+`endif
 `include "../libs/ddr3/ddr3_top.sv"
 `include "../libs/uart/uart.sv"
 
@@ -13,6 +16,9 @@
  `endif
 
 `define LENGTH(ADR,SIZ,OFS) (((ADR+SIZ-1)>>(OFS))-((ADR)>>(OFS)))
+
+`include "VX_define.vh"
+import VX_gpu_pkg::*;
 
 module maxhpc(
  `include "../ecpix5_ports.hv"
@@ -45,6 +51,8 @@ module maxhpc(
   assign sysclk = clk_pll[0]; // 50MHz
   assign ddrclk = clk_pll[1]; // 50MHz (90 degree phase shift)
  `else
+  wire       pll_locked = 1'b1;
+
   assign sysclk = fpga_sysclk;
   assign ddrclk = fpga_sysclk;
  `endif
@@ -71,28 +79,64 @@ module maxhpc(
 /**/
 
 /* DDR3 */
- reg[31:0] axi4_awaddr;
- reg [7:0] axi4_awlen;
- reg       axi4_awvalid;
- wire      axi4_awready;
+ reg axi4_busy;
+
+ wire       axi4_awvalid;
+  reg rcv_axi4_awvalid;
+  reg vx_axi4_awvalid;
+  assign axi4_awvalid = rcv_axi4_awvalid || vx_axi4_awvalid;
+ wire[31:0] axi4_awaddr;
+  reg[31:0] rcv_axi4_awaddr;
+  reg[31:0] vx_axi4_awaddr;
+  assign axi4_awaddr = (rcv_axi4_awvalid)? rcv_axi4_awaddr
+                                         : vx_axi4_awaddr;
+ wire [7:0] axi4_awlen;
+  wire[7:0] rcv_axi4_awlen = 8'h00;
+  wire[7:0] vx_axi4_awlen = (`VX_MEM_DATA_WIDTH/32)-1;
+  assign axi4_awlen = (rcv_axi4_awvalid)? rcv_axi4_awlen
+                                        : vx_axi4_awlen;
+ wire       axi4_awready;
  //
- reg[31:0] axi4_wdata;
- reg [3:0] axi4_wstrb;
- reg       axi4_wlast;
- reg       axi4_wvalid;
- wire      axi4_wready;
+ wire       axi4_wvalid;
+  reg rcv_axi4_wvalid;
+  reg vx_axi4_wvalid;
+  assign axi4_wvalid = rcv_axi4_wvalid || vx_axi4_wvalid;
+ wire[31:0] axi4_wdata;
+  reg                  [31:0] rcv_axi4_wdata;
+  reg[`VX_MEM_DATA_WIDTH-1:0] vx_axi4_wdata;
+  assign axi4_wdata = (rcv_axi4_wvalid)? rcv_axi4_wdata
+                                       : vx_axi4_wdata[31:0];
+ wire [3:0] axi4_wstrb;
+  reg                     [3:0] rcv_axi4_wstrb;
+  reg[`VX_MEM_BYTEEN_WIDTH-1:0] vx_axi4_wstrb;
+  assign axi4_wstrb = (rcv_axi4_wvalid)? rcv_axi4_wstrb
+                                       : vx_axi4_wstrb[3:0];
+ wire       axi4_wlast;
+  wire rcv_axi4_wlast = 1'b1;
+  wire vx_axi4_wlast;
+  assign axi4_wlast = (rcv_axi4_wvalid)? rcv_axi4_wlast
+                                       : vx_axi4_wlast;
+ wire       axi4_wready;
  //
- reg[31:0] axi4_araddr;
- reg [7:0] axi4_arlen;
- logic     axi4_arvalid;
- wire      axi4_arready;
+ wire       axi4_arvalid;
+  wire rsp_axi4_arvalid;
+  reg  vx_axi4_arvalid;
+  assign axi4_arvalid = rsp_axi4_arvalid || vx_axi4_arvalid;
+ wire[31:0] axi4_araddr;
+  reg[31:0] rsp_axi4_araddr;
+  reg[31:0] vx_axi4_araddr;
+  assign axi4_araddr = (rsp_axi4_arvalid)? rsp_axi4_araddr
+                                         : vx_axi4_araddr;
+ wire [7:0] axi4_arlen;
+  wire[7:0] rsp_axi4_arlen = 8'h00;
+  wire[7:0] vx_axi4_arlen = (`VX_MEM_DATA_WIDTH/32)-1;
+  assign axi4_arlen = (rsp_axi4_arvalid)? rsp_axi4_arlen
+                                        : vx_axi4_arlen;
+ wire       axi4_arready;
  //
  wire[31:0] axi4_rdata;
  wire       axi4_rlast;
  wire       axi4_rvalid;
-//
-wire[31:0] dfi_rddata_w;
-wire       dfi_rddata_valid_w;
  ddr3_top ddr3(
  // clocks, reset
   .rst(!rst_)
@@ -142,8 +186,31 @@ wire       dfi_rddata_valid_w;
  ,.axi4_rresp ()
  ,.axi4_rlast (axi4_rlast)
  ,.axi4_rvalid(axi4_rvalid)
- ,.axi4_rready(axi4_rvalid)
+ ,.axi4_rready(1'b1       )
  );
+
+ `ALWAYS(posedge sysclk, negedge rst_)
+  if (!rst_) begin
+   axi4_busy <= 1'b0;
+  end
+   else begin
+    if (
+     axi4_awvalid
+     ||
+     axi4_arvalid
+     ||
+     mem_req_valid && mem_req_ready
+    ) begin
+     axi4_busy <= 1'b1;
+    end
+    if (
+     axi4_wvalid && axi4_wready && axi4_wlast
+     ||
+     axi4_rvalid && axi4_rlast
+    ) begin
+     axi4_busy <= 1'b0;
+    end
+   end
 /**/
 
 /* UART */
@@ -174,11 +241,126 @@ wire       dfi_rddata_valid_w;
 /**/
 
 /* Vortex stuff */
- wire       ddcr_wr_valid;
- wire[31:0] dcr_wr_addr;
- wire[31:0] dc_wr_data;
+ /* Vortex instance */
+  reg vx_rst;
+  // Memory request
+  wire                           mem_req_valid;
+  wire                           mem_req_rw;
+  wire[`VX_MEM_BYTEEN_WIDTH-1:0] mem_req_byteen;
+  wire[  `VX_MEM_ADDR_WIDTH-1:0] mem_req_addr;
+  wire[  `VX_MEM_DATA_WIDTH-1:0] mem_req_data;
+  wire[   `VX_MEM_TAG_WIDTH-1:0] mem_req_tag;
+  wire                           mem_req_ready;
+  // Memory response    
+  reg                         mem_rsp_valid;
+  reg[`VX_MEM_DATA_WIDTH-1:0] mem_rsp_data;
+  reg[ `VX_MEM_TAG_WIDTH-1:0] mem_rsp_tag;
+  wire                        mem_rsp_ready;
+  // DCR write request
+  wire                         dcr_wr_valid;
+  wire[`VX_DCR_ADDR_WIDTH-1:0] dcr_wr_addr;
+  wire[`VX_DCR_DATA_WIDTH-1:0] dcr_wr_data;
+  // Status
+  wire vx_busy;
+  // maxhpc
+  wire                           sim_ebreak;
+  wire[`NUM_REGS-1:0][`XLEN-1:0] sim_wb_value;
+  //
+  Vortex vortex(
+   // Clock
+   .clk  (sysclk)
+  ,.reset(vx_rst)
+  ,// Memory request
+   .mem_req_valid (mem_req_valid )
+  ,.mem_req_rw    (mem_req_rw    )
+  ,.mem_req_byteen(mem_req_byteen)
+  ,.mem_req_addr  (mem_req_addr  )
+  ,.mem_req_data  (mem_req_data  )
+  ,.mem_req_tag   (mem_req_tag   )
+  ,.mem_req_ready (mem_req_ready )
+  ,// Memory response    
+   .mem_rsp_valid(mem_rsp_valid)
+  ,.mem_rsp_data (mem_rsp_data )
+  ,.mem_rsp_tag  (mem_rsp_tag  )
+  ,.mem_rsp_ready(mem_rsp_ready)
+  ,// DCR write request
+   .dcr_wr_valid(dcr_wr_valid)
+  ,.dcr_wr_addr (dcr_wr_addr )
+  ,.dcr_wr_data (dcr_wr_data )
+  ,// Status
+   .busy(vx_busy)
+  ,// maxhpc
+   .sim_ebreak  (sim_ebreak  )
+  ,.sim_wb_value(sim_wb_value)
+  );
 
- /* receive */
+  /* mem_req_/mem_rsp_ */
+   assign mem_req_ready = !axi4_busy;
+
+   reg      vx_axi4_read;
+   reg[5:0] vx_axi4_wCnt;
+    assign vx_axi4_wlast = vx_axi4_wCnt[5];
+   `ALWAYS(posedge sysclk, negedge rst_)
+    if (!rst_) begin
+     vx_axi4_awvalid <= 1'b0;
+     vx_axi4_wvalid <= 1'b0;
+     vx_axi4_arvalid <= 1'b0;
+     //
+     vx_axi4_read <= 1'b0;
+     vx_axi4_wCnt <= -1;
+     //
+     mem_rsp_valid <= 1'b0;
+    end
+     else begin
+      if (axi4_awready) begin
+       vx_axi4_awvalid <= 1'b0;
+      end
+      if (axi4_arready) begin
+       vx_axi4_arvalid <= 1'b0;
+      end
+      if (axi4_wready) begin
+       vx_axi4_wCnt <= vx_axi4_wCnt-1;
+       //
+       vx_axi4_wdata <= vx_axi4_wdata>>32;
+       vx_axi4_wstrb <= vx_axi4_wstrb>>4;
+       //
+       if (vx_axi4_wlast) begin
+        vx_axi4_wvalid <= 1'b0;
+       end
+      end
+      if (mem_req_valid && mem_req_ready) begin
+       vx_axi4_awvalid <= mem_req_rw;
+       vx_axi4_awaddr <= mem_req_addr<<(32-`VX_MEM_ADDR_WIDTH);
+       vx_axi4_wvalid <= mem_req_rw;
+       vx_axi4_wdata <= mem_req_data;
+       vx_axi4_wstrb <= mem_req_byteen;
+       //
+       vx_axi4_wCnt <= vx_axi4_awlen -1;
+       //
+       //
+       vx_axi4_arvalid <= !mem_req_rw;
+       vx_axi4_araddr <= mem_req_addr<<(32-`VX_MEM_ADDR_WIDTH);
+       mem_rsp_tag <= mem_req_tag;
+      end
+      if (vx_axi4_arvalid || rsp_axi4_arvalid) begin
+       vx_axi4_read <= vx_axi4_arvalid;
+      end
+      //
+      //
+      if (mem_rsp_ready) begin
+       mem_rsp_valid <= 1'b0;
+      end
+      if (axi4_rvalid) begin
+       mem_rsp_data[`VX_MEM_DATA_WIDTH-1-:32] <= axi4_rdata;
+       mem_rsp_data[0+:`VX_MEM_DATA_WIDTH-32] <= mem_rsp_data[`VX_MEM_DATA_WIDTH-1-:`VX_MEM_DATA_WIDTH-32];
+       //
+       mem_rsp_valid <= vx_axi4_read && axi4_rlast;
+      end
+     end
+  /**/
+ /**/
+
+ /* receive command */
   enum {RCV_CMD
        ,RCV_CMD_STB
        ,RCV_AXI4_WDATA
@@ -191,28 +373,35 @@ wire       dfi_rddata_valid_w;
    reg   [31:0] addr;
    reg[4*8-1:0] opcode;
   } rcv_cmd;
+   assign dcr_wr_valid = rcv_state[RCV_DCR_WRITE];
+   assign dcr_wr_addr = rcv_cmd.addr;
+   assign dcr_wr_data = rcv_cmd.sizdat;
   reg[6:0] rcv_cmdCnt;
   //
   reg[32:0] rcv_wrCnt;
   reg [1:0] rcv_wrPtr;
   `ALWAYS(posedge sysclk, negedge rst_)
    if (!rst_) begin
-    axi4_awvalid <= 1'b0;
-    axi4_wvalid  <= 1'b0;
+    rcv_axi4_awvalid <= 1'b0;
+    rcv_axi4_wvalid  <= 1'b0;
+    //
+    //
+    vx_rst <= 1'b1;
+    //
     //
     rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
     rcv_state <= (1<<RCV_CMD);
    end
     else begin
      if (axi4_awready) begin
-      axi4_awvalid <= 1'b0;
-      if (axi4_awvalid) begin
-       axi4_awaddr <= axi4_awaddr+4;
+      rcv_axi4_awvalid <= 1'b0;
+      if (rcv_axi4_awvalid) begin
+       rcv_axi4_awaddr <= rcv_axi4_awaddr+4;
       end
      end
      if (axi4_wready) begin
-      axi4_wvalid <= 1'b0;
-      axi4_wstrb <= 4'b1111;
+      rcv_axi4_wvalid <= 1'b0;
+      rcv_axi4_wstrb <= 4'b1111;
      end
      unique case (rcv_state)
       default: begin // (1<<RCV_CMD)
@@ -231,9 +420,11 @@ wire       dfi_rddata_valid_w;
        rcv_wrCnt <= rcv_cmd.sizdat -2;
        rcv_wrPtr <= rcv_cmd.addr[1:0];
        //
-       axi4_awaddr  <= rcv_cmd.addr[31:2]<<2;
-       axi4_wstrb  <= 4'b1111<<rcv_cmd.addr[1:0];
+       rcv_axi4_awaddr  <= rcv_cmd.addr[31:2]<<2;
+       rcv_axi4_wstrb  <= 4'b1111<<rcv_cmd.addr[1:0];
        //
+       rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
+       rcv_state <= (1<<RCV_CMD);
        case (rcv_cmd.opcode)
         "ddrW": begin
          rcv_state <= (1<<RCV_AXI4_WDATA);
@@ -243,9 +434,11 @@ wire       dfi_rddata_valid_w;
          rcv_state <= (1<<RCV_DCR_WRITE);
         end
         //
+        "rstW": begin
+         vx_rst <= rcv_cmd.sizdat[0];
+        end
+        //
         default: begin
-         rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
-         rcv_state <= (1<<RCV_CMD);
         end
        endcase
       end
@@ -256,37 +449,37 @@ wire       dfi_rddata_valid_w;
         rcv_wrPtr <= rcv_wrPtr+1;
         case (rcv_wrPtr)
          2'h0: begin
-          axi4_wdata[0+:8] <= rx_byte;
+          rcv_axi4_wdata[0+:8] <= rx_byte;
          end
          2'h1: begin
-          axi4_wdata[8+:8] <= rx_byte;
+          rcv_axi4_wdata[8+:8] <= rx_byte;
          end
          2'h2: begin
-          axi4_wdata[16+:8] <= rx_byte;
+          rcv_axi4_wdata[16+:8] <= rx_byte;
          end
          2'h3: begin
-          axi4_wdata[24+:8] <= rx_byte;
+          rcv_axi4_wdata[24+:8] <= rx_byte;
          end
         endcase
-        if ((rcv_wrPtr==3'h3) || rcv_wrCnt[32]) begin
+        if ((rcv_wrPtr==2'h3) || rcv_wrCnt[32]) begin
          rcv_state <= (1<<RCV_AXI4_WRITE);
         end
        end
       end
       //
       (1<<RCV_AXI4_WRITE): begin
-       axi4_awlen   <= 8'h0;
-       axi4_awvalid <= 1'b1;
-       //
-       axi4_wlast  <= 1'b1;
-       axi4_wvalid <= 1'b1;
-       //
-       rcv_state <= (1<<RCV_AXI4_WDATA);
-       rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
-       if (rcv_wrCnt[32] && !rcv_wrCnt[0]) begin
-        axi4_wstrb  <= axi4_wstrb & (4'b1111>>(2'h3 & ~(rcv_cmd.addr[1:0]+rcv_cmd.sizdat[1:0]-1)));
+       if (!axi4_busy) begin
+        rcv_axi4_awvalid <= 1'b1;
         //
-        rcv_state <= (1<<RCV_CMD);
+        rcv_axi4_wvalid <= 1'b1;
+        //
+        rcv_state <= (1<<RCV_AXI4_WDATA);
+        rcv_cmdCnt <= ($bits(rcv_cmd)+7)/8 -2;
+        if (rcv_wrCnt[32] && !rcv_wrCnt[0]) begin
+         rcv_axi4_wstrb  <= rcv_axi4_wstrb & (4'b1111>>(2'h3 & ~(rcv_cmd.addr[1:0]+rcv_cmd.sizdat[1:0]-1)));
+         //
+         rcv_state <= (1<<RCV_CMD);
+        end
        end
       end
       //
@@ -297,39 +490,48 @@ wire       dfi_rddata_valid_w;
      endcase
     end
  /**/
- /* send */
-  enum {SND_IDLE
-       ,SND_AXI4_ARVALID
-       ,SND_AXI4_RVALID
-       ,SND_AXI4_RDATA
-       ,SNDST_SIZE} SNDST_ENUM;
-  reg[SNDST_SIZE-1:0] snd_state;
-   assign axi4_arvalid = snd_state[SND_AXI4_ARVALID];
-  reg[31:0] snd_word;
-  reg[32:0] snd_byteCnt;
-  reg [1:0] snd_axi4rdPtr;
+ /* respond */
+  enum {RSP_IDLE
+       ,RSP_AXI4_READ
+       ,RSP_AXI4_ARVALID
+       ,RSP_AXI4_RVALID
+       ,RSP_AXI4_RDATA
+       ,RSP_TAP_READ
+       ,RSPST_SIZE} RSPST_ENUM;
+  reg[RSPST_SIZE-1:0] rsp_state;
+   assign rsp_axi4_arvalid = rsp_state[RSP_AXI4_ARVALID];
+  reg[31:0] rsp_word;
+  reg[32:0] rsp_byteCnt;
+  reg [1:0] rsp_axi4rdPtr;
+  reg[31:0] rsp_taps[0:3];
   `ALWAYS(posedge sysclk, negedge rst_)
    if (!rst_) begin
     tx_req <= 1'b0;
     //
-    snd_state <= (1<<SND_IDLE);
+    rsp_state <= (1<<RSP_IDLE);
    end
     else begin
      if (!tx_idle) begin
       tx_req <= 1'b0;
      end
-     unique case (snd_state)
-      default: begin // (1<<SND_IDLE)
+     unique case (rsp_state)
+      default: begin // (1<<RSP_IDLE)
        if (rcv_state[RCV_CMD_STB]) begin
         case (rcv_cmd.opcode)
          "ddrR": begin
-          axi4_araddr <= rcv_cmd.addr[31:2]<<2;
-          axi4_arlen   <= 8'h0;
+          rsp_axi4_araddr <= rcv_cmd.addr[31:2]<<2;
           //
-          snd_byteCnt <= rcv_cmd.sizdat -2;
-          snd_axi4rdPtr <= rcv_cmd.addr[1:0];
+          rsp_byteCnt <= rcv_cmd.sizdat -2;
+          rsp_axi4rdPtr <= rcv_cmd.addr[1:0];
           //
-          snd_state <= (1<<SND_AXI4_ARVALID);
+          rsp_state <= (1<<RSP_AXI4_READ);
+         end
+         //
+         "tapR": begin
+          rsp_byteCnt <= ($bits(rsp_word)+7)/8 -2;
+          rsp_word <= rsp_taps[rcv_cmd.addr[1:0]];
+          //
+          rsp_state <= (1<<RSP_TAP_READ);
          end
          //
          default: begin
@@ -338,50 +540,79 @@ wire       dfi_rddata_valid_w;
        end
       end
       //
-      (1<<SND_AXI4_ARVALID): begin
+      (1<<RSP_AXI4_READ): begin
+       if (!axi4_busy) begin
+        rsp_state <= (1<<RSP_AXI4_ARVALID);
+       end
+      end
+      //
+      (1<<RSP_AXI4_ARVALID): begin
        if (axi4_arready) begin
-        axi4_araddr <= axi4_araddr+4;
+        rsp_axi4_araddr <= rsp_axi4_araddr+4;
         //
-        snd_state <= (1<<SND_AXI4_RVALID);
+        rsp_state <= (1<<RSP_AXI4_RVALID);
        end
       end
       //
-      (1<<SND_AXI4_RVALID): begin
+      (1<<RSP_AXI4_RVALID): begin
        if (axi4_rvalid) begin
-        snd_word <= axi4_rdata>>(8*snd_axi4rdPtr);
+        rsp_word <= axi4_rdata>>(8*rsp_axi4rdPtr);
         //
-        snd_state <= (1<<SND_AXI4_RDATA);
+        rsp_state <= (1<<RSP_AXI4_RDATA);
        end
       end
       //
-      (1<<SND_AXI4_RDATA): begin
+      (1<<RSP_AXI4_RDATA): begin
        if (tx_idle && !tx_req) begin
-        snd_byteCnt <= snd_byteCnt-1;
-        snd_axi4rdPtr <= snd_axi4rdPtr+1;
+        rsp_byteCnt <= rsp_byteCnt-1;
+        rsp_axi4rdPtr <= rsp_axi4rdPtr+1;
         //
-        tx_byte <= snd_word[0+:8];
-        snd_word <= snd_word>>8;
+        tx_byte <= rsp_word[0+:8];
+        rsp_word <= rsp_word>>8;
         tx_req <= 1'b1;
         //
-        if (snd_axi4rdPtr==3'h3) begin
-         snd_state <= (1<<SND_AXI4_ARVALID);
+        if (rsp_axi4rdPtr==2'h3) begin
+         rsp_state <= (1<<RSP_AXI4_ARVALID);
         end
-        if (snd_byteCnt[32]) begin
-         snd_state <= (1<<SND_IDLE);
+        if (rsp_byteCnt[32]) begin
+         rsp_state <= (1<<RSP_IDLE);
+        end
+       end
+      end
+      //
+      (1<<RSP_TAP_READ): begin
+       if (tx_idle && !tx_req) begin
+        rsp_byteCnt <= rsp_byteCnt-1;
+        //
+        tx_byte <= rsp_word[0+:8];
+        rsp_word <= rsp_word>>8;
+        tx_req <= 1'b1;
+        //
+        if (rsp_byteCnt[32]) begin
+         rsp_state <= (1<<RSP_IDLE);
         end
        end
       end
      endcase
     end
  /**/
-
- assign dcr_wr_valid = rcv_state[RCV_DCR_WRITE];
- assign dcr_wr_addr = rcv_cmd.addr;
- assign dcr_wr_data = rcv_cmd.sizdat;
 /**/
 
 /* LEDs */
- assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = {{3{1'b1}},{3{1'b1}},{3{1'b1}},{3{1'b1}}};
+// assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = {{3{1'b1}},{3{1'b1}},{3{1'b1}},{3{1'b1}}};
+ assign {led_rgb3,led_rgb2,led_rgb1,led_rgb0} = {{3{1'b1}},{3{1'b1}},{3{vx_rst}},{3{!vx_busy}}};
+/**/
+
+/* rsp_taps */
+ `ALWAYS(posedge sysclk, negedge rst_)
+  if (!rst_) begin
+   rsp_taps[0] <= 32'h00000000;
+   rsp_taps[1] <= 32'h00000000;
+   rsp_taps[2] <= 32'h00000000;
+   rsp_taps[3] <= 32'h00000000;
+  end
+   else begin
+   end
 /**/
 
 endmodule
