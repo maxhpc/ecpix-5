@@ -25,7 +25,8 @@ namespace vortex {
    int ddrR(void* dest, uint32_t addr, uint32_t size);
    int dcrW(uint32_t addr, uint32_t value);
    int rstW(bool value);
-   int tapR(void* dest, uint8_t tap_i);
+   int tapR(uint32_t* value, uint8_t tap_i);
+   int tapW(uint8_t tap_i, uint32_t value);
    int run();
 
   private:
@@ -112,7 +113,7 @@ namespace vortex {
    return -1;
   }
   //
-  if (my_readn(fd, dest, cmd.sizdat)<0) {
+  if (my_readn(fd, dest, cmd.sizdat)!=cmd.sizdat) {
    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
    return -1;
   }
@@ -137,14 +138,23 @@ namespace vortex {
   return 0;
  }
  
- int maxhpc::tapR(void* dest, uint8_t tap_i) {
+ int maxhpc::tapR(uint32_t* dest, uint8_t tap_i) {
   cmd cmd = {{'R','p','a','t'}, tap_i, 0};
   if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
    return -1;
   }
   //
-  if (my_readn(fd, dest, 4)<0) {
+  if (my_readn(fd, dest, 4)!=4) {
+   printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+   return -1;
+  }
+  return 0;
+ }
+ 
+ int maxhpc::tapW(uint8_t tap_i, uint32_t value) {
+  cmd cmd = {{'W','p','a','t'}, tap_i, value};
+  if (write(fd, &cmd, sizeof(cmd)) != sizeof(cmd)) {
    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
    return -1;
   }

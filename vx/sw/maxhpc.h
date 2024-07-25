@@ -15,7 +15,8 @@ namespace vortex {
    int ddrR(void* dest, uint32_t addr, uint32_t size);
    int dcrW(uint32_t addr, uint32_t value);
    int rstW(bool value);
-   int tapR(void* dest, uint8_t tap_i);
+   int tapR(uint32_t* value, uint8_t tap_i);
+   int tapW(uint8_t tap_i, uint32_t value);
    int run();
   
   private:
