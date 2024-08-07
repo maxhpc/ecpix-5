@@ -13,4 +13,4 @@ project.v: $(SRC)
 	sv2v ${SV2V_FLAGS} $^ > $@
 
 clean:
-	rm -rf project.v ${PROJECT}.{bit,cfg,json}
+	rm -rf ${PROJECT}.{bit,cfg,json} project.v

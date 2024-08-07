@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.5-dev (c0a777c22, 2024-07-26)"
+   sodipodi:docname="maxhpc.svg"
+   inkscape:export-filename="maxhpc.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="447.95215"
+     inkscape:cy="217.43534"
+     inkscape:window-width="1916"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="DartArrow"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Dart arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         transform="scale(-0.5)"
+         id="path6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.30000001"
+       markerHeight="0.30000001"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <linearGradient
+       id="swatch40"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop40" />
+    </linearGradient>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       height="1.4"
+       width="1.4"
+       y="-0.2"
+       x="-0.2"
+       inkscape:label="Outline"
+       id="filter58">
+      <feGaussianBlur
+         in="SourceAlpha"
+         stdDeviation="0.3"
+         result="blur1"
+         id="feGaussianBlur54" />
+      <feComposite
+         in="SourceGraphic"
+         in2="blur1"
+         operator="out"
+         result="composite1"
+         id="feComposite54" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 -0 "
+         result="colormatrix1"
+         id="feColorMatrix54" />
+      <feGaussianBlur
+         stdDeviation="0.01"
+         result="blur2"
+         id="feGaussianBlur55" />
+      <feComposite
+         in="blur2"
+         in2="blur2"
+         operator="over"
+         result="composite2"
+         id="feComposite55" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 3.39 -0 "
+         result="colormatrix2"
+         id="feColorMatrix55" />
+      <feGaussianBlur
+         stdDeviation="0.12"
+         result="blur3"
+         id="feGaussianBlur56" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 5 -1 "
+         result="colormatrix3"
+         id="feColorMatrix56" />
+      <feFlood
+         flood-opacity="1.000000"
+         flood-color="black"
+         result="flood"
+         id="feFlood56" />
+      <feComposite
+         in="flood"
+         in2="colormatrix3"
+         k2="1"
+         operator="in"
+         result="composite3"
+         id="feComposite56" />
+      <feComposite
+         in="composite3"
+         in2="colormatrix3"
+         operator="out"
+         result="composite4"
+         id="feComposite57" />
+      <feComposite
+         in="composite4"
+         in2="composite3"
+         k2="1"
+         k3="1"
+         operator="arithmetic"
+         result="composite5"
+         id="feComposite58" />
+    </filter>
+    <marker
+       style="overflow:visible"
+       id="DartArrow-8"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Dart arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         transform="scale(-0.5)"
+         id="path6-7" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="116.32055"
+       y="87.889496"
+       id="text62"><tspan
+         sodipodi:role="line"
+         id="tspan62"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+         x="116.32055"
+         y="87.889496">ddrW,</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+         x="116.32055"
+         y="93.18116"
+         id="tspan64">ddrR</tspan></text>
+    <rect
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="115.96043"
+       height="126.3828"
+       x="93.943466"
+       y="11.953505" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;opacity:1;fill:#000000ff;stroke:none;stroke-width:0.499999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0.1;stroke-dasharray:none;stroke-opacity:1"
+       x="126.47085"
+       y="18.785404"
+       id="text2"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="font-size:7.05556px;fill:#000000ff;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0.1"
+         x="126.47085"
+         y="18.785404">MAXHPC (ECPIX-5 part)</tspan></text>
+    <rect
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.400202;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0.1;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2"
+       width="56.732407"
+       height="75.864075"
+       x="150.0038"
+       y="58.219425" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1;stroke-miterlimit:0.1;stroke-linecap:butt;stroke-linejoin:miter;opacity:1"
+       x="164.04126"
+       y="63.078537"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:0.1;stroke-linecap:butt;stroke-linejoin:miter"
+         x="164.04126"
+         y="63.078537">VORTEX Instance</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.55744;stroke-dasharray:none;stroke-opacity:1;stroke-miterlimit:0.1;stroke-linecap:butt;stroke-linejoin:miter;opacity:1"
+       id="rect3"
+       width="56.817513"
+       height="22.019024"
+       x="149.69119"
+       y="28.840376" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-dasharray:none;stroke-opacity:1;stroke-miterlimit:0.1;stroke-linecap:butt;stroke-linejoin:miter;opacity:1"
+       x="162.19724"
+       y="40.036976"
+       id="text4"><tspan
+         sodipodi:role="line"
+         id="tspan4"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:0.1;stroke-linecap:butt;stroke-linejoin:miter"
+         x="162.19724"
+         y="40.036976">DDR3 (512 MB)</tspan></text>
+    <path
+       id="rect4"
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.422374;stroke-miterlimit:0.1"
+       d="m 119.12136,51.78658 h 19.8856 l 3.54562,10.550924 h -27.13216 z"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Triangle);marker-end:url(#Triangle)"
+       d="m 128.81848,49.895475 -0.17921,-10.081142 h 18.77054"
+       id="path58"
+       sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:0.992647"
+       x="121.41405"
+       y="56.062401"
+       id="text58"><tspan
+         sodipodi:role="line"
+         id="tspan58"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2"
+         x="121.41405"
+         y="56.062401">DDR3</tspan><tspan
+         sodipodi:role="line"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2"
+         x="121.41405"
+         y="61.354065"
+         id="tspan59">arbiter</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:0.992647"
+       x="99.218712"
+       y="81.756248"
+       id="text60"><tspan
+         sodipodi:role="line"
+         id="tspan60"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.5"
+         x="99.218712"
+         y="81.756248">UART</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Triangle);marker-end:url(#Triangle)"
+       d="m 148.16666,71.702082 -14.72592,-0.170566 -0.0907,-7.237766"
+       id="path61"
+       sodipodi:nodetypes="ccc" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect61"
+       width="33.114693"
+       height="56.31369"
+       x="98.541618"
+       y="77.412529" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect62"
+       width="14.766073"
+       height="13.269363"
+       x="115.57359"
+       y="82.657974" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1.96559;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Triangle);marker-end:url(#Triangle)"
+       d="M 122.8045,80.755708 V 64.293779"
+       id="path64"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:sans-serif;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="150.42206"
+       y="70.567276"
+       id="text65"><tspan
+         sodipodi:role="line"
+         id="tspan65"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:2"
+         x="150.42206"
+         y="70.567276">Memory</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:2"
+         x="150.42206"
+         y="75.85894"
+         id="tspan66">access</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="116.96284"
+       y="103.43385"
+       id="text62-1"><tspan
+         sodipodi:role="line"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+         x="116.96284"
+         y="103.43385"
+         id="tspan64-7">rstW</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect62-0"
+       width="14.852935"
+       height="6.9016657"
+       x="115.64338"
+       y="98.688011" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:0.228566;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#DartArrow)"
+       d="m 130.43955,102.10817 h 18.19214"
+       id="path67"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <ellipse
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="path68"
+       cx="144.72704"
+       cy="102.06303"
+       rx="0.39687499"
+       ry="0.33072916" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:0.237828px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#DartArrow)"
+       d="M 144.78579,102.00214 V 56.609484 h -2.60664"
+       id="path69"
+       sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:sans-serif;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="150.81252"
+       y="103.05525"
+       id="text69"><tspan
+         sodipodi:role="line"
+         id="tspan69"
+         style="font-size:4.23333px;stroke-width:0.3"
+         x="150.81252"
+         y="103.05525">reset</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="116.52678"
+       y="113.33852"
+       id="text62-1-0"><tspan
+         sodipodi:role="line"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+         x="116.52678"
+         y="113.33852"
+         id="tspan64-7-6">dcrW</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect62-0-2"
+       width="14.852935"
+       height="6.9016657"
+       x="115.20724"
+       y="108.59274" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:0.23125;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#DartArrow-8)"
+       d="M 130.03072,111.87339 H 148.6525"
+       id="path67-2"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:sans-serif;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="150.54494"
+       y="111.24629"
+       id="text70"><tspan
+         sodipodi:role="line"
+         id="tspan70"
+         style="stroke-width:0.2"
+         x="150.54494"
+         y="111.24629">DCR-write</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.2"
+         x="150.54494"
+         y="116.53796"
+         id="tspan71">iface</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="100.5948"
+       y="124.65876"
+       id="text62-7"><tspan
+         sodipodi:role="line"
+         id="tspan62-5"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+         x="100.5948"
+         y="124.65876">tapR,</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.3"
+         x="100.5948"
+         y="129.95042"
+         id="tspan64-9">tapW</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect62-2"
+       width="14.766073"
+       height="13.269363"
+       x="99.847885"
+       y="119.42719" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       id="rect71"
+       width="59.280018"
+       height="17.651926"
+       x="11.414659"
+       y="92.906334" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:sans-serif;-inkscape-font-specification:sans-serif;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="12.435405"
+       y="98.160416"
+       id="text72"><tspan
+         sodipodi:role="line"
+         id="tspan72"
+         style="font-size:5.64444px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1"
+         x="12.435405"
+         y="98.160416">HOST</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="13.229162"
+       y="105.56876"
+       id="text73"><tspan
+         sodipodi:role="line"
+         id="tspan73"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';stroke-width:1"
+         x="13.229162"
+         y="105.56876">vortex/runtime/maxhpc</tspan></text>
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:black;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Triangle);marker-end:url(#Triangle)"
+       d="M 73.038849,102.71168 H 96.537753"
+       id="path73"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="78.469933"
+       y="101.24706"
+       id="text74"><tspan
+         sodipodi:role="line"
+         id="tspan74"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:2"
+         x="78.469933"
+         y="101.24706">USB</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;font-family:sans-serif;-inkscape-font-specification:sans-serif;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="75.658104"
+       y="106.67815"
+       id="text75"><tspan
+         sodipodi:role="line"
+         id="tspan75"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52778px;font-family:sans-serif;-inkscape-font-specification:sans-serif;stroke-width:2"
+         x="75.658104"
+         y="106.67815">(FT2232)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:3;stroke-dasharray:none;stroke-opacity:1"
+       x="139.69778"
+       y="23.324665"
+       id="text73-7"><tspan
+         sodipodi:role="line"
+         id="tspan73-3"
+         style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold Italic';stroke-width:1"
+         x="139.69778"
+         y="23.324665">vortex/ecpix-5/vx/maxhpc.sv</tspan></text>
+  </g>
+</svg>

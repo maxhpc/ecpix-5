@@ -246,3 +246,4 @@ always @(posedge rclk)
 endmodule
 `undef ALWAYS
 `endif
+// vim: foldenable foldmethod=indent shiftwidth=1 foldlevel=0

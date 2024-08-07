@@ -9,8 +9,9 @@
 `include "core_ddr3_controller/src_v/ddr3_core.v"
 `include "core_ddr3_controller/src_v/ddr3_axi.v"
 
-module ddr3_top
-(
+module ddr3_top #(parameter
+ DDR_MHZ=50
+)(
 /* */
  input rst
 ,input clk
@@ -135,9 +136,9 @@ end
 
 ddr3_axi
 #(
-     .DDR_WRITE_LATENCY(3)
-    ,.DDR_READ_LATENCY(3)
-    ,.DDR_MHZ(50)
+     .DDR_WRITE_LATENCY(5 -3)
+    ,.DDR_READ_LATENCY(6 -3)
+    ,.DDR_MHZ(DDR_MHZ)
 )
 u_ddr
 (
@@ -193,3 +194,4 @@ u_ddr
 /**/
 
 endmodule
+// vim: foldenable foldmethod=indent shiftwidth=1 foldlevel=0

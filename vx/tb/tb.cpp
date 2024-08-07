@@ -14,6 +14,7 @@ class tb {
 
  public:
   tb() {
+   Verilated::randSeed(0);
    #if VM_TRACE_VCD
     Verilated::traceEverOn(true);
     dut.trace(&trace, 99);
@@ -27,7 +28,7 @@ class tb {
 //   dut.uart_rxd = 0;
 //   run(50);
 //   dut.uart_rxd = 1;
-   run(100000);
+   run(200000);
   }
 
   ~tb() {
@@ -48,8 +49,11 @@ class tb {
   }
 
   void run(uint64_t n) {
-   for (uint64_t i=0; i<n; i++) {
+   while (Vcnxt.time()<n) {
     tick();
+if (Vcnxt.time()%10000 == 0) {
+ printf("TS: %d\n", Vcnxt.time());
+}
    }
   }
 

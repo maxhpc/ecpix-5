@@ -180,6 +180,9 @@ module maxhpc(
                                        : vx_axi4_wlast;
  wire       axi4_wready;
  //
+ wire[1:0] axi4_bresp;
+ wire      axi4_bvalid;
+ //
  wire       axi4_arvalid;
   wire rsp_axi4_arvalid;
   reg  vx_axi4_arvalid;
@@ -234,8 +237,8 @@ module maxhpc(
  ,.axi4_wready(axi4_wready)
  ,
   .axi4_bid   ()
- ,.axi4_bresp ()
- ,.axi4_bvalid()
+ ,.axi4_bresp (axi4_bresp)
+ ,.axi4_bvalid(axi4_bvalid)
  ,.axi4_bready(1'b1)
  ,
   .axi4_arid   (0)
@@ -273,7 +276,7 @@ module maxhpc(
      axi4_busy <= 1'b1;
     end
     if (
-     axi4_wvalid && axi4_wready && axi4_wlast
+     axi4_bvalid
      ||
      axi4_rvalid && axi4_rlast
     ) begin
@@ -356,13 +359,13 @@ module maxhpc(
     mem_rsp_valid <= 1'b0;
    end
     else begin
-     if (vx_axi4_awvalid && axi4_awready) begin
+     if (axi4_awready) begin
       vx_axi4_awvalid <= 1'b0;
      end
-     if (vx_axi4_arvalid && axi4_arready) begin
+     if (axi4_arready) begin
       vx_axi4_arvalid <= 1'b0;
      end
-     if (axi4_wvalid && axi4_wready) begin
+     if (vx_axi4_wvalid && axi4_wready) begin
       vx_axi4_wCnt <= vx_axi4_wCnt-1;
       //
       vx_axi4_wdata <= vx_axi4_wdata>>32;
@@ -702,7 +705,7 @@ module maxhpc(
  reg stap_trig;
  reg[9:0] stap_trigAdr;
   assign rsp_rtaps[2] = stap_trigAdr;
- reg[4:0] tttCnt;
+ reg[7:0] tttCnt;
  `ALWAYS(posedge sysclk, negedge rst_)
   if (!rst_) begin
    stap_run <= 1'b1;
@@ -736,15 +739,17 @@ tttCnt <= 0;
     end
     /**/
     //
-    stap_trig  <= tttCnt[4];
+    stap_trig  <= mem_req_valid && mem_req_ready && (mem_req_addr=='h400A)/*tttCnt[7]*/;
 tttCnt <= tttCnt+1;
-if (!vx_axi4_awvalid) begin
+if (!mem_req_valid || mem_req_ready) begin
  tttCnt <= 0;
 end
-    stap_wdat[0] <= {                             axi4_rlast,    axi4_rvalid
-                    ,vx_axi4_arvalid, axi4_wlast, axi4_wready,   vx_axi4_wvalid
-                    ,vx_axi4_awvalid, mem_req_rw, mem_req_ready, mem_req_valid
+    stap_wdat[0] <= {                 axi4_bresp,                  axi4_bvalid
+                    ,axi4_rlast,      axi4_rvalid, axi4_arready,   vx_axi4_arvalid
+                    ,axi4_wlast,      axi4_wready, vx_axi4_wvalid, axi4_awready
+                    ,vx_axi4_awvalid, mem_req_rw,  mem_req_ready,  mem_req_valid
                     };
+stap_wdat[0] <= axi4_wdata;
     stap_wdat[1] <= stap_wdat[0];
     if (rcv_wtap_stb[2]) begin
      stap_run <= 1'b1;
@@ -786,6 +791,17 @@ end
      rsp_rtaps[0][31:16] <= 0;
     end
    end
+
+/* *
+ `ALWAYS(posedge sysclk, negedge rst_)
+  if (!rst_) begin
+  end
+   else begin
+    if (stap_trig) begin
+     $stop();
+    end
+   end
+ /**/
 /**/
 
 endmodule
