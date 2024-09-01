@@ -1,3 +1,3 @@
 [submodule "libs/ddr3/core_ddr3_controller"]
 	path = libs/ddr3/core_ddr3_controller
-	url = https://github.com/ultraembedded/core_ddr3_controller
+	url = https://github.com/maxhpc/core_ddr3_controller
