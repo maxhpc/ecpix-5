@@ -162,9 +162,23 @@ namespace vortex {
  }
  
  int maxhpc::run() {
-printf("2222222222222222222222222222222222222222222222222222222222222\n");
+printf("%s:%d: write garbage to 0x100280\n", __FUNCTION__, __LINE__);
+  uint8_t* wbuf = (uint8_t*)malloc(0x100);
+   if (wbuf==NULL) {
+    printf("Error %s:%d: %s\n", __FILE__, __LINE__, strerror(errno));
+    return -1;
+   }
+   for (uint32_t i=0; i<0x100; i++) {
+    wbuf[i] = random();
+   }
+  if (ddrW(0x100280, wbuf, 0x100)) {
+   return -1;
+  }
+printf("%s:%d: set reset=0\n", __FUNCTION__, __LINE__);
   rstW(0);
-sleep(10);
+printf("%s:%d: sleep(3)\n", __FUNCTION__, __LINE__);
+sleep(3);
+printf("%s:%d: set reset=1\n", __FUNCTION__, __LINE__);
   rstW(1);
   return 0;
  }
