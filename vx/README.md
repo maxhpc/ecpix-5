@@ -1,4 +1,4 @@
-# My efforts of implementing Vortex on FPGA
+# My efforts in implementing Vortex on FPGA
 
 [![](maxhpc1.png)](maxhpc1.png)*<small><small>maxhpc's Vortex FPGA implementation</small></small>*
 
